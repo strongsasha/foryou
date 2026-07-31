@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>Питання дня 💌</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  html, body {
+    height: 100%;
+    overscroll-behavior: none;
+  }
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb);
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
+    font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+    overflow: hidden;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+  }
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .card {
+    background: rgba(255,255,255,0.88);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    padding: 36px 24px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    max-width: 460px;
+    width: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 2;
+    animation: popIn 0.5s ease;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .emoji {
+    font-size: 55px;
+    margin-bottom: 10px;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+  h1 {
+    font-size: 25px;
+    color: #333;
+    margin-bottom: 28px;
+    line-height: 1.4;
+  }
+  h2 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 22px;
+  }
+  .btns {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    position: relative;
+    height: 60px;
+  }
+  button {
+    padding: 15px 28px;
+    min-height: 48px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+    touch-action: manipulation;
+  }
+  #yes {
+    background: linear-gradient(135deg, #ff6a88, #ff99ac);
+    color: white;
+    box-shadow: 0 8px 20px rgba(255,106,136,0.4);
+  }
+  #yes:hover { transform: scale(1.08); }
+  #no {
+    background: #eee;
+    color: #666;
+    position: relative;
+  }
+  .hint {
+    margin-top: 18px;
+    font-size: 13px;
+    color: #999;
+  }
+  .heart {
+    position: fixed;
+    top: -10%;
+    font-size: 24px;
+    animation: fall linear forwards;
+    z-index: 1;
+    pointer-events: none;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); opacity: 0.2; }
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .options {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 26px;
+  }
+  .option {
+    background: white;
+    border: 2px solid #f1d6de;
+    border-radius: 20px;
+    padding: 16px 10px;
+    width: 100px;
+    min-height: 48px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    touch-action: manipulation;
+  }
+  .option:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(255,106,136,0.2);
+  }
+  .option.selected {
+    border-color: #ff6a88;
+    background: #fff0f4;
+    transform: translateY(-4px) scale(1.03);
+  }
+  .option .oemoji {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .option .olabel {
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+  }
+
+  input[type="date"] {
+    padding: 13px 16px;
+    min-height: 48px;
+    width: 100%;
+    max-width: 240px;
+    border-radius: 14px;
+    border: 2px solid #f1d6de;
+    font-size: 16px;
+    font-family: inherit;
+    margin-bottom: 26px;
+    outline: none;
+    color: #444;
+    -webkit-appearance: none;
+    appearance: none;
+    touch-action: manipulation;
+  }
+  input[type="date"]:focus { border-color: #ff6a88; }
+
+  #confirm {
+    background: linear-gradient(135deg, #ff6a88, #ff99ac);
+    color: white;
+    box-shadow: 0 8px 20px rgba(255,106,136,0.4);
+    opacity: 0.5;
+    pointer-events: none;
+    display: block;
+    margin: 0 auto;
+  }
+  #confirm.ready {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  #confirm:hover.ready { transform: scale(1.05); }
+
+  .summary {
+    background: #fff0f4;
+    border-radius: 18px;
+    padding: 18px;
+    margin-top: 4px;
+    font-size: 16px;
+    color: #444;
+    line-height: 1.6;
+  }
+  .summary b { color: #e8558a; }
+</style>
+</head>
+<body>
+
+<div class="card screen active" id="question">
+  <div class="emoji">🌸</div>
+  <h1>Привіт! У мене до тебе питання...<br><br>Чи не хотіла би ти піти погуляти в неділю?)</h1>
+  <div class="btns">
+    <button id="yes" onclick="goToChoice()">Так! 😊</button>
+    <button id="no" onmouseover="runAway()" ontouchstart="dodgeTouch(event)">Ні</button>
+  </div>
+  <div class="hint"></div>
+</div>
+
+<div class="card screen" id="choice">
+  <div class="emoji">🌷</div>
+  <h2>Айй сюдаа! А куди би ти хотіла піти?</h2>
+  <div class="options">
+    <div class="option" data-value="Кава" onclick="selectOption(this)">
+      <span class="oemoji">☕</span>
+      <span class="olabel">Кава</span>
+    </div>
+    <div class="option" data-value="Кіно" onclick="selectOption(this)">
+      <span class="oemoji">🎬</span>
+      <span class="olabel">Кіно</span>
+    </div>
+        <div class="option" data-value="Просто погуляти" onclick="selectOption(this)">
+      <span class="oemoji">🌳</span>
+      <span class="olabel">Просто погуляти</span>
+    </div>
+    <div class="option" data-value="Щось інше" onclick="selectOption(this)">
+      <span class="oemoji">✨</span>
+      <span class="olabel">Щось інше</span>
+    </div>
+  </div>
+  <button id="confirm" onclick="showResult()">Повний газ 💌</button>
+</div>
+
+<div class="card screen" id="result">
+  <div class="emoji">🥳</div>
+  <h1>Найс, договорились!</h1>
+  <div class="summary" id="summaryText"></div>
+</div>
+
+<script>
+const noBtn = document.getElementById('no');
+const questionCard = document.getElementById('question');
+let selectedActivity = null;
+
+function dodgeTouch(e) {
+  e.preventDefault();
+  runAway();
+}
+
+function runAway() {
+  const cardRect = questionCard.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
+  const maxX = cardRect.width - btnRect.width - 20;
+  const maxY = cardRect.height - btnRect.height - 20;
+  const randX = Math.random() * maxX - maxX / 2;
+  const randY = Math.random() * maxY - maxY / 2;
+  noBtn.style.position = 'absolute';
+  noBtn.style.left = `calc(50% + ${randX}px)`;
+  noBtn.style.top = `calc(50% + ${randY}px)`;
+}
+
+function switchScreen(fromId, toId) {
+  document.getElementById(fromId).classList.remove('active');
+  document.getElementById(toId).classList.add('active');
+}
+
+function goToChoice() {
+  switchScreen('question', 'choice');
+}
+
+function selectOption(el) {
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedActivity = el.dataset.value;
+  checkReady();
+}
+
+function checkReady() {
+  const confirmBtn = document.getElementById('confirm');
+  if (selectedActivity) {
+    confirmBtn.classList.add('ready');
+  } else {
+    confirmBtn.classList.remove('ready');
+  }
+}
+
+// ⚠️ Встав сюди свій ендпоінт з formspree.io (Settings → Integration)
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mojgzrkj";
+
+function showResult() {
+  document.getElementById('summaryText').innerHTML =
+    `<b>${selectedActivity}</b><br>В неділю 🗓️<br><br>Тоди ще спишимось в лс`;
+  switchScreen('choice', 'result');
+  spawnHearts();
+  sendResult();
+}
+
+function sendResult() {
+  if (!FORMSPREE_ENDPOINT.includes("формspree") && FORMSPREE_ENDPOINT.includes("ВСТАВ_СЮДИ_СВІЙ_ID")) {
+    console.warn("Formspree endpoint не налаштований — дані нікуди не відправляються.");
+    return;
+  }
+  fetch(FORMSPREE_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+    body: JSON.stringify({
+      answer: "Так, погуляємо в неділю!",
+      activity: selectedActivity,
+      day: "Неділя"
+    })
+  }).catch(err => console.warn("Не вдалось відправити:", err));
+}
+
+function spawnHearts() {
+  const emojis = ['💗','🌸','🎀','💐'];
+  for (let i = 0; i < 40; i++) {
+    setTimeout(() => {
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      h.style.left = Math.random()*100 + 'vw';
+      h.style.animationDuration = (Math.random()*3+3) + 's';
+      h.style.fontSize = (Math.random()*20+16) + 'px';
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 6000);
+    }, i * 100);
+  }
+}
+</script>
+
+</body>
+</html>
