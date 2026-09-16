@@ -2,354 +2,377 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="format-detection" content="telephone=no">
-<title>Питання дня 💌</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
 <style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
+  :root{
+    --bg-top:#1b1330;
+    --bg-bot:#2d1f4a;
+    --stem:#5f8f6e;
+    --stem-dark:#3c5c48;
+    --ribbon:#5d156a;
+    --ribbon-dark:#a13a56;
+    --card:#241a3d;
+    --text:#f3ecf7;
   }
-  html, body {
-    height: 100%;
-    overscroll-behavior: none;
-  }
-  body {
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb);
-    background-size: 400% 400%;
-    animation: gradientShift 12s ease infinite;
-    font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
-    overflow: hidden;
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    -webkit-font-smoothing: antialiased;
-    padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
-  }
-  @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  .card {
-    background: rgba(255,255,255,0.88);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    border-radius: 28px;
-    padding: 36px 24px;
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-    max-width: 460px;
-    width: 100%;
-    max-height: 100%;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    z-index: 2;
-    animation: popIn 0.5s ease;
-  }
-  @keyframes popIn {
-    from { transform: scale(0.7); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-  .emoji {
-    font-size: 55px;
-    margin-bottom: 10px;
-    animation: bounce 2s infinite;
-  }
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-  }
-  h1 {
-    font-size: 25px;
-    color: #333;
-    margin-bottom: 28px;
-    line-height: 1.4;
-  }
-  h2 {
-    font-size: 20px;
-    color: #333;
-    margin-bottom: 22px;
-  }
-  .btns {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    position: relative;
-    height: 60px;
-  }
-  button {
-    padding: 15px 28px;
-    min-height: 48px;
-    border: none;
-    border-radius: 50px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.15s ease;
-    font-family: inherit;
-    -webkit-appearance: none;
-    appearance: none;
-    touch-action: manipulation;
-  }
-  #yes {
-    background: linear-gradient(135deg, #ff6a88, #ff99ac);
-    color: white;
-    box-shadow: 0 8px 20px rgba(255,106,136,0.4);
-  }
-  #yes:hover { transform: scale(1.08); }
-  #no {
-    background: #eee;
-    color: #666;
-    position: relative;
-  }
-  .hint {
-    margin-top: 18px;
-    font-size: 13px;
-    color: #999;
-  }
-  .heart {
-    position: fixed;
-    top: -10%;
-    font-size: 24px;
-    animation: fall linear forwards;
-    z-index: 1;
-    pointer-events: none;
-  }
-  @keyframes fall {
-    to { transform: translateY(110vh) rotate(360deg); opacity: 0.2; }
+  
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;}
+  body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+    radial-gradient(1.5px 1.5px at 20px 30px, #fff, transparent),
+    radial-gradient(1px 1px at 90px 120px, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 160px 60px, #fff, transparent),
+    radial-gradient(1px 1px at 220px 180px, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 300px 40px, #fff, transparent),
+    radial-gradient(1px 1px at 350px 150px, #fff, transparent),
+    radial-gradient(ellipse 70% 55% at 50% 38%, var(--bg-bot), var(--bg-top));
+    background-repeat: repeat;
+    background-size: 400px 400px, 400px 400px, 400px 400px, 400px 400px, 400px 400px, 400px 400px, cover;
+    font-family:'Georgia', 'Times New Roman', serif;
+    overflow:hidden;
   }
 
-  .screen { display: none; }
-  .screen.active { display: block; }
-
-  .options {
-    display: flex;
-    gap: 14px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 26px;
-  }
-  .option {
-    background: white;
-    border: 2px solid #f1d6de;
-    border-radius: 20px;
-    padding: 16px 10px;
-    width: 100px;
-    min-height: 48px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    touch-action: manipulation;
-  }
-  .option:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(255,106,136,0.2);
-  }
-  .option.selected {
-    border-color: #ff6a88;
-    background: #fff0f4;
-    transform: translateY(-4px) scale(1.03);
-  }
-  .option .oemoji {
-    font-size: 32px;
-    display: block;
-    margin-bottom: 8px;
-  }
-  .option .olabel {
-    font-size: 14px;
-    font-weight: 600;
-    color: #444;
+  .bouquet{
+    position:relative;
+    width:720px;
+    max-width:94vw;
+    height:580px;
+    max-height:88vh;
   }
 
-  input[type="date"] {
-    padding: 13px 16px;
-    min-height: 48px;
-    width: 100%;
-    max-width: 240px;
-    border-radius: 14px;
-    border: 2px solid #f1d6de;
-    font-size: 16px;
-    font-family: inherit;
-    margin-bottom: 26px;
-    outline: none;
-    color: #444;
-    -webkit-appearance: none;
-    appearance: none;
-    touch-action: manipulation;
-  }
-  input[type="date"]:focus { border-color: #ff6a88; }
 
-  #confirm {
-    background: linear-gradient(135deg, #ff6a88, #ff99ac);
-    color: white;
-    box-shadow: 0 8px 20px rgba(255,106,136,0.4);
-    opacity: 0.5;
-    pointer-events: none;
-    display: block;
-    margin: 0 auto;
-  }
-  #confirm.ready {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  #confirm:hover.ready { transform: scale(1.05); }
 
-  .summary {
-    background: #fff0f4;
-    border-radius: 18px;
-    padding: 18px;
-    margin-top: 4px;
-    font-size: 16px;
-    color: #444;
-    line-height: 1.6;
+  .stem-line{
+    position:absolute;
+    left:50%;
+    bottom:112px;
+    width:6px;
+    transform-origin:50% 100%;
+    transform:translateX(-50%) rotate(var(--angle));
+    background:linear-gradient(180deg, var(--stem), var(--stem-dark));
+    border-radius:3px;
+    pointer-events:none;
   }
-  .summary b { color: #e8558a; }
+  .leaf{
+    position:absolute;
+    width:26px; height:14px;
+    background:linear-gradient(120deg, var(--stem), var(--stem-dark));
+    border-radius:0 100% 0 100%;
+    pointer-events:none;
+  }
+  .leaf.l{ left:-20px; top:40%; transform:rotate(10deg); }
+  .leaf.r{ right:-20px; top:58%; transform:rotate(-10deg) scaleX(-1); }
+
+  .stem-filler{
+    position:absolute;
+    left:50%;
+    width:5px;
+    transform-origin:50% 0%;
+    background:linear-gradient(180deg, var(--stem), var(--stem-dark));
+    border-radius:3px;
+    pointer-events:none;
+  }
+
+  .head-wrap{
+    position:absolute;
+    transform-origin:50% 100%;
+    perspective:420px;
+    cursor:pointer;
+  }
+
+  .head{
+    position:relative;
+    width:var(--size);
+    height:var(--size);
+    transform-style:preserve-3d;
+    transform:rotateX(48deg);
+    transition:transform .4s cubic-bezier(.2,.8,.3,1.2);
+  }
+  .head-wrap:hover .head{ transform:rotateX(42deg) scale(1.04); }
+  .head-wrap.open .head{ transform:rotateX(32deg) scale(1.1); }
+
+  .petal{
+    position:absolute;
+    left:50%; top:50%;
+    width:calc(var(--size) * 0.34);
+    height:calc(var(--size) * 0.58);
+    background:linear-gradient(175deg, var(--pl) 0%, var(--pd) 100%);
+    border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
+    transform-origin:50% 100%;
+    transform:translate(-50%,-100%) rotate(var(--rot));
+    box-shadow:inset -3px -5px 9px rgba(0,0,0,.22), inset 2px 3px 5px rgba(255,255,255,.18);
+  }
+
+  .center{
+    position:absolute;
+    left:50%; top:50%;
+    width:calc(var(--size) * 0.26);
+    height:calc(var(--size) * 0.26);
+    margin:calc(var(--size) * -0.13) 0 0 calc(var(--size) * -0.13);
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #c04343, #fdc365 65%, #c8903c 100%);
+    box-shadow:0 3px 7px rgba(0,0,0,.35);
+    transform:translateZ(6px);
+  }
+
+  .tie{
+    position:absolute;
+    left:50%;
+    bottom:96px;
+    transform:translateX(-50%);
+    width:64px; height:34px;
+    background:linear-gradient(160deg, var(--ribbon), var(--ribbon-dark));
+    border-radius:6px;
+    box-shadow:0 4px 10px rgba(0,0,0,.35);
+    z-index:20;
+  }
+  .bow{
+    position:absolute;
+    left:50%; bottom:110px;
+    transform:translateX(-50%);
+    z-index:21;
+    width:80px; height:40px;
+  }
+  .bow::before, .bow::after{
+    content:"";
+    position:absolute;
+    top:4px;
+    width:34px; height:30px;
+    background:linear-gradient(160deg, var(--ribbon), var(--ribbon-dark));
+    border-radius:50% 50% 50% 4px;
+    box-shadow:0 3px 6px rgba(0,0,0,.3);
+  }
+  .bow::before{ left:2px; transform:rotate(-18deg); }
+  .bow::after{ right:2px; transform:rotate(18deg) scaleX(-1); }
+  .bow-knot{
+    position:absolute;
+    left:50%; bottom:112px;
+    transform:translateX(-50%);
+    width:16px; height:16px;
+    border-radius:50%;
+    background:var(--ribbon-dark);
+    z-index:22;
+    box-shadow:0 2px 4px rgba(0,0,0,.3);
+  }
+  .ribbon-tail{
+    position:absolute;
+    left:50%; bottom:40px;
+    width:14px; height:58px;
+    background:linear-gradient(180deg, var(--ribbon), var(--ribbon-dark));
+    z-index:19;
+    clip-path:polygon(0 0,100% 0,100% 82%,50% 100%,0 82%);
+  }
+  .ribbon-tail.l{ margin-left:-24px; transform:rotate(-8deg); }
+  .ribbon-tail.r{ margin-left:10px; transform:rotate(8deg); }
+
+  .note{
+    position:fixed;
+    left:50%;
+    bottom:34px;
+    transform:translate(-50%, 16px);
+    max-width:340px;
+    width:88%;
+    padding:18px 22px;
+    background:var(--card);
+    border-left:4px solid var(--accent, #e8c07d);
+    border-radius:10px;
+    box-shadow:0 16px 34px rgba(8,5,16,.5);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .4s ease, transform .4s cubic-bezier(.2,.85,.3,1.15);
+    z-index:50;
+  }
+  .note.show{
+    opacity:1;
+    transform:translate(-50%, 0);
+    pointer-events:auto;
+  }
+  .note p{
+    margin:0;
+    font-style:italic;
+    font-size:1.05rem;
+    line-height:1.5;
+    color:var(--text);
+  }
+
+  @media (max-width:480px){
+    .bouquet{ height:520px; }
+  }
 </style>
 </head>
 <body>
 
-<div class="card screen active" id="question">
-  <div class="emoji">🌸</div>
-  <h1>Привіт! У мене до тебе питання...<br><br>Чи не хотіла би ти піти погуляти в неділю?)</h1>
-  <div class="btns">
-    <button id="yes" onclick="goToChoice()">Так! 😊</button>
-    <button id="no" onmouseover="runAway()" ontouchstart="dodgeTouch(event)">Ні</button>
-  </div>
-  <div class="hint"></div>
+<div class="bouquet" id="bouquet">
+  <div class="ribbon-tail l"></div>
+  <div class="ribbon-tail r"></div>
+  <div class="tie"></div>
+  <div class="bow"></div>
+  <div class="bow-knot"></div>
 </div>
 
-<div class="card screen" id="choice">
-  <div class="emoji">🌷</div>
-  <h2>Айй сюдаа! А куди би ти хотіла піти?</h2>
-  <div class="options">
-    <div class="option" data-value="Кава" onclick="selectOption(this)">
-      <span class="oemoji">☕</span>
-      <span class="olabel">Кава</span>
-    </div>
-    <div class="option" data-value="Кіно" onclick="selectOption(this)">
-      <span class="oemoji">🎬</span>
-      <span class="olabel">Кіно</span>
-    </div>
-        <div class="option" data-value="Просто погуляти" onclick="selectOption(this)">
-      <span class="oemoji">🌳</span>
-      <span class="olabel">Просто погуляти</span>
-    </div>
-    <div class="option" data-value="Щось інше" onclick="selectOption(this)">
-      <span class="oemoji">✨</span>
-      <span class="olabel">Щось інше</span>
-    </div>
-  </div>
-  <button id="confirm" onclick="showResult()">Повний газ 💌</button>
-</div>
-
-<div class="card screen" id="result">
-  <div class="emoji">🥳</div>
-  <h1>Найс, договорились!</h1>
-  <div class="summary" id="summaryText"></div>
+<div class="note" id="note">
+  <video id="noteVideo" style="max-width:100%; border-radius:8px; margin-bottom:10px; display:none;" controls muted></video>
+  <p id="noteText"></p>
 </div>
 
 <script>
-const noBtn = document.getElementById('no');
-const questionCard = document.getElementById('question');
-let selectedActivity = null;
+const compliments = [
+  { text: "Вмієш ловити конект", video: "" },
+  { text: "Твоя посмішка запам'ятовується надовго.", video: "" },
+  { text: "", video: "curious-pig.mp4" },
+  { text: "", video: "abcde.mp4" },
+  { text: "Легенда", video: "" },
+  { text: "В тебе красиві очі", video: "" },
+  { text: "Ти вмієш слухати ", video: "" },
+  { text: "Твоя доброта помітна навіть у дрібницях", video: "" },
+  { text: "", video: "abcd.mp4" },
+  { text: "Ти дуже гарна  ", video: "" }
+];
 
-function dodgeTouch(e) {
-  e.preventDefault();
-  runAway();
+  const palette = [
+    ['purple', 'red'],
+
+  ];
+
+
+  const layout = [
+    { angle: -40, len: 100, size: 100  },//світлорозовий
+    { angle: -38, len: 190, size: 120 }, //бежевий лівий
+    { angle: -25, len: 140, size: 100  },// голубий лівий
+    { angle: -15, len: 200, size: 120 },// центральний жовтий
+    { angle:   0, len: 155, size: 100  },// Центральний розовий 
+    { angle:  14, len: 200, size: 120 },// зелений 
+    { angle:  25, len: 135, size: 100  },//правий розовий
+    { angle:  38, len: 190, size: 120  },//правий фіолетовий
+    { angle:  40, len: 100, size: 100  }, //жовтий правий
+    { angle:  0, len: 100, size: 100  } //синій центр 
+  ];
+
+
+  const FILLER_ANCHOR = 99; // px from the bouquet's bottom edge
+  const fillerStems = [
+    { angle: -26, len: 50 },
+    { angle: -11, len: 50 },
+    { angle:   3, len: 50 },
+    { angle:  16, len: 50 },
+    { angle:  29, len: 45 }
+  ];
+
+  const bouquet = document.getElementById('bouquet');
+  const petalCount = 6;
+  const noteEl = document.getElementById('note');
+  const noteText = document.getElementById('noteText');
+  let openWrap = null;
+
+  fillerStems.forEach(cfg => {
+    const filler = document.createElement('div');
+    filler.className = 'stem-filler';
+    filler.style.height = cfg.len + 'px';
+
+    filler.style.bottom = (FILLER_ANCHOR - cfg.len) + 'px';
+    filler.style.transform = `translateX(-50%) rotate(${cfg.angle}deg)`;
+    bouquet.appendChild(filler);
+  });
+
+
+  layout.forEach((cfg, i) => {
+    const stem = document.createElement('div');
+    stem.className = 'stem-line';
+    stem.style.setProperty('--angle', cfg.angle + 'deg');
+    stem.style.height = cfg.len + 'px';
+
+    if (i % 2 === 0) {
+      const leafL = document.createElement('div');
+      leafL.className = 'leaf l';
+      stem.appendChild(leafL);
+    } else {
+      const leafR = document.createElement('div');
+      leafR.className = 'leaf r';
+      stem.appendChild(leafR);
+    }
+
+    bouquet.appendChild(stem);
+  });
+
+
+  const heads = layout.map((cfg, i) => ({ cfg, i }));
+  heads.sort((a, b) => b.cfg.len - a.cfg.len);
+
+  heads.forEach(({ cfg, i }) => {
+    const [light, dark] = palette[i % palette.length];
+    const rad = cfg.angle * Math.PI / 180;
+    const dx = cfg.len * Math.sin(rad);   // px, left/right offset from pivot
+    const dyUp = cfg.len * Math.cos(rad); 
+
+    const headWrap = document.createElement('div');
+    headWrap.className = 'head-wrap';
+    const OVERLAP = 10 + cfg.size * 0.09;
+
+    const LEAN = cfg.angle * 0.35;
+    headWrap.style.left = `calc(50% + ${dx.toFixed(1)}px)`;
+    headWrap.style.bottom = `${(112 + dyUp - OVERLAP).toFixed(1)}px`;
+    headWrap.style.transform = `translate(-50%, 6%) rotate(${LEAN.toFixed(1)}deg)`;
+
+    const head = document.createElement('div');
+    head.className = 'head';
+    head.style.setProperty('--size', cfg.size + 'px');
+
+    for (let p = 0; p < petalCount; p++) {
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      petal.style.setProperty('--rot', (p * (360 / petalCount)) + 'deg');
+      petal.style.setProperty('--pl', light);
+      petal.style.setProperty('--pd', dark);
+      head.appendChild(petal);
+    }
+    const center = document.createElement('div');
+    center.className = 'center';
+    head.appendChild(center);
+    headWrap.appendChild(head);
+    bouquet.appendChild(headWrap);
+
+    headWrap.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const wasOpen = headWrap.classList.contains('open');
+      if (openWrap) openWrap.classList.remove('open');
+      if (wasOpen) {
+        openWrap = null;
+        noteEl.classList.remove('show');
+      } else {
+        headWrap.classList.add('open');
+        openWrap = headWrap;
+        const c = compliments[i % compliments.length];
+        noteText.textContent = c.text;
+
+        const noteVideo = document.getElementById('noteVideo');
+    if (c.video) {
+      noteVideo.src = c.video;
+      noteVideo.style.display = 'block';
+       noteVideo.play();
+    } else {
+      noteVideo.pause();
+      noteVideo.removeAttribute('src');
+      noteVideo.style.display = 'none';
+    }
+
+  noteEl.style.setProperty('--accent', dark);
+  noteEl.classList.add('show');
 }
+    });
+  });
 
-function runAway() {
-  const cardRect = questionCard.getBoundingClientRect();
-  const btnRect = noBtn.getBoundingClientRect();
-  const maxX = cardRect.width - btnRect.width - 20;
-  const maxY = cardRect.height - btnRect.height - 20;
-  const randX = Math.random() * maxX - maxX / 2;
-  const randY = Math.random() * maxY - maxY / 2;
-  noBtn.style.position = 'absolute';
-  noBtn.style.left = `calc(50% + ${randX}px)`;
-  noBtn.style.top = `calc(50% + ${randY}px)`;
-}
-
-function switchScreen(fromId, toId) {
-  document.getElementById(fromId).classList.remove('active');
-  document.getElementById(toId).classList.add('active');
-}
-
-function goToChoice() {
-  switchScreen('question', 'choice');
-}
-
-function selectOption(el) {
-  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedActivity = el.dataset.value;
-  checkReady();
-}
-
-function checkReady() {
-  const confirmBtn = document.getElementById('confirm');
-  if (selectedActivity) {
-    confirmBtn.classList.add('ready');
-  } else {
-    confirmBtn.classList.remove('ready');
-  }
-}
-
-// ⚠️ Встав сюди свій ендпоінт з formspree.io (Settings → Integration)
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/mojgzrkj";
-
-function showResult() {
-  document.getElementById('summaryText').innerHTML =
-    `<b>${selectedActivity}</b><br>В неділю 🗓️<br><br>Тоди ще спишимось в лс`;
-  switchScreen('choice', 'result');
-  spawnHearts();
-  sendResult();
-}
-
-function sendResult() {
-  if (!FORMSPREE_ENDPOINT.includes("формspree") && FORMSPREE_ENDPOINT.includes("ВСТАВ_СЮДИ_СВІЙ_ID")) {
-    console.warn("Formspree endpoint не налаштований — дані нікуди не відправляються.");
-    return;
-  }
-  fetch(FORMSPREE_ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "Accept": "application/json" },
-    body: JSON.stringify({
-      answer: "Так, погуляємо в неділю!",
-      activity: selectedActivity,
-      day: "Неділя"
-    })
-  }).catch(err => console.warn("Не вдалось відправити:", err));
-}
-
-function spawnHearts() {
-  const emojis = ['💗','🌸','🎀','💐'];
-  for (let i = 0; i < 40; i++) {
-    setTimeout(() => {
-      const h = document.createElement('div');
-      h.className = 'heart';
-      h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-      h.style.left = Math.random()*100 + 'vw';
-      h.style.animationDuration = (Math.random()*3+3) + 's';
-      h.style.fontSize = (Math.random()*20+16) + 'px';
-      document.body.appendChild(h);
-      setTimeout(() => h.remove(), 6000);
-    }, i * 100);
-  }
-}
+  document.body.addEventListener('click', () => {
+    if (openWrap) {
+      openWrap.classList.remove('open');
+      openWrap = null;
+      noteEl.classList.remove('show');
+    }
+  });
 </script>
-
 </body>
 </html>
